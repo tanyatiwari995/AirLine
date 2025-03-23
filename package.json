@@ -1,0 +1,23 @@
+{
+  "name": "aieline-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body": "^5.1.0",
+    "cookies": "^0.9.1",
+    "corns": "^0.0.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "http-status-codes": "^2.3.0",
+    "nodemon": "^3.1.9",
+    "parser": "^0.1.4",
+    "winston": "^3.17.0"
+  }
+}
