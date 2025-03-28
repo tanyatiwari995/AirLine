@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password":"tanyatiwari123456789" ,
-    "database": "database_development",
+    "database": "Flights",
     "host": "localhost",
     "dialect": "mysql"
   },
