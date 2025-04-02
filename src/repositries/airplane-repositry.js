@@ -20,6 +20,5 @@ class AirplaneRepoistry extends CrudRepository {
 }
 
 
-
 module.exports = AirplaneRepoistry;
 

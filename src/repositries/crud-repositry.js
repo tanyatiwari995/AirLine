@@ -20,6 +20,7 @@ class CrudRepository {
     }
     return this.model.findByPk(id);
   }
+  
 
   async getAll() {
     if (this.useObject || !this.model) {
