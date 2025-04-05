@@ -1,4 +1,6 @@
 .env
-node_modules/\
+node_modules
 combined.log
 src/config/config.js
+
+

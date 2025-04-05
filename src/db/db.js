@@ -1,10 +1,12 @@
 const path = require("path");
 const mysql = require("mysql2");
+// const config = require("../config/config.json");
 
 // Correct path to config.json inside src/config/
-const configPath = path.join(__dirname, "../config/config.json"); 
+const configPath = path.join(__dirname, "../config/config.json");
 
-console.log("Loading config from:", configPath); // Debugging
+console.log("Loading config from:", configPath);
+// Debugging
 
 const config = require(configPath); // Load config.json
 const env = process.env.NODE_ENV || "development";
@@ -26,4 +28,3 @@ connection.connect((err) => {
 });
 
 module.exports = connection;
-

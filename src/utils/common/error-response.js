@@ -4,4 +4,5 @@ const error = {
   data: {},
   error: {},
 };
-module.export = error;
+// module.export = error;
+module.exports = error;  

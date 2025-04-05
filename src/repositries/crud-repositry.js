@@ -1,11 +1,21 @@
+
+// const db = require("./db/db.js");
+// db.query("INSERT INTO your_table (col1, col2) VALUES (?, ?)", [val1, val2], (err, result) => {
+//   if (err) throw err;
+//   console.log("Data inserted:", result);
+// });
+
 class CrudRepository {
   constructor(model = null, useObject = false) {
     this.model = model;
     this.useObject = useObject;
-    this.data = []; // In-memory storage when no model is used
+    this.data = []; 
+    // In-memory storage when no model is used
   }
 
   async create(data) {
+    console.log(data);
+    
     if (this.useObject || !this.model) {
       data.id = this.data.length + 1;
       this.data.push(data);
@@ -13,16 +23,13 @@ class CrudRepository {
     }
     return this.model.create(data);
   }
-
-  async get(id) {
+  async get(id){
     if (this.useObject || !this.model) {
       return this.data.find(item => item.id === id) || null;
     }
     return this.model.findByPk(id);
   }
-  
-
-  async getAll() {
+  async getAll(){
     if (this.useObject || !this.model) {
       return this.data;
     }

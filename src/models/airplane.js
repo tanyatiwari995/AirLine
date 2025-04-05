@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     type: DataTypes.STRING,
     allowNull: false
   },
-  capacity: DataTypes.INTEGER
+  capacity: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'Airplane',
