@@ -1,56 +1,91 @@
-
-// const db = require("./db/db.js");
-// db.query("INSERT INTO your_table (col1, col2) VALUES (?, ?)", [val1, val2], (err, result) => {
-//   if (err) throw err;
-//   console.log("Data inserted:", result);
-// });
+const { logger } = require("../config");
 
 class CrudRepository {
-  constructor(model = null, useObject = false) {
+  constructor(model, useObject = false) {
     this.model = model;
     this.useObject = useObject;
-    this.data = []; 
+    this.data = [];
     // In-memory storage when no model is used
   }
 
   async create(data) {
     console.log(data);
-    
-    if (this.useObject || !this.model) {
-      data.id = this.data.length + 1;
-      this.data.push(data);
-      return data;
+    console.log("model here",this.model);
+    try {
+      if (this.useObject || !this.model) {
+        data.id = this.data.length + 1;
+        this.data.push(data);
+        return data;
+      }
+      return this.model.create(data);
+    } catch (error) {
+      logger.error(
+        "Something went wrong in the Crud Repository : create",
+        error
+      );
+      throw error;
     }
-    return this.model.create(data);
   }
-  async get(id){
-    if (this.useObject || !this.model) {
-      return this.data.find(item => item.id === id) || null;
+  async get(id) {
+    try {
+      if (this.useObject || !this.model) {
+        return this.data.find((item) => item.id === id) || null;
+      }
+      return this.model.findByPk(id);
+    } catch (error) {
+      logger.error(
+        "Something went wrong in the Crud Repository : create",
+        error
+      );
+      throw error;
     }
-    return this.model.findByPk(id);
   }
-  async getAll(){
-    if (this.useObject || !this.model) {
-      return this.data;
+  async getAll() {
+    try {
+      if (this.useObject || !this.model) {
+        return this.data;
+      }
+      return this.model.findAll();
+    } catch (error) {
+      logger.error(
+        "Something went wrong in the Crud Repository : create",
+        error
+      );
+      throw error;
     }
-    return this.model.findAll();
   }
 
   async update(id, newData) {
-    if (this.useObject || !this.model) {
-      let item = this.data.find(item => item.id === id);
-      if (item) Object.assign(item, newData);
-      return item;
+    try {
+      if (this.useObject || !this.model) {
+        let item = this.data.find((item) => item.id === id);
+        if (item) Object.assign(item, newData);
+        return item;
+      }
+      return this.model.update(newData, { where: { id } });
+    } catch (error) {
+      logger.error(
+        "Something went wrong in the Crud Repository : create",
+        error
+      );
+      throw error;
     }
-    return this.model.update(newData, { where: { id } });
   }
 
   async destroy(id) {
-    if (this.useObject || !this.model) {
-      this.data = this.data.filter(item => item.id !== id);
-      return { message: "Deleted successfully" };
+    try {
+      if (this.useObject || !this.model) {
+        this.data = this.data.filter((item) => item.id !== id);
+        return { message: "Deleted successfully" };
+      }
+      return this.model.destroy({ where: { id } });
+    } catch (error) {
+      logger.error(
+        "Something went wrong in the Crud Repository : create",
+        error
+      );
+      throw error;
     }
-    return this.model.destroy({ where: { id } });
   }
 }
 
@@ -65,7 +100,7 @@ module.exports = CrudRepository;
 //   async create(data) {
 //     console.log("Data received in create:", data);
 //     if (!this.model) {
-//       console.error("Model is undefined in CrudRepository!");
+//       logger.error("Model is undefined in CrudRepository!");
 //       return;
 //     }
 
@@ -73,51 +108,54 @@ module.exports = CrudRepository;
 //       const response = await this.model.create(data);
 //       return response;
 //     } catch (error) {
-//       console.error("Something went wrong in the Crud Repository : create", error);
+//       logger.error(
+//         "Something went wrong in the Crud Repository : create",
+//         error
+//       );
 //       throw error;
 //     }
 //   }
-//     // Delete a record by data
-//     async destroy(data) {
-//       try {
-//         const response = await this.model.destroy({
-//           where: { id: data },
-//         });
-//         return response;
-//       } catch (error) {
-//         console.error(
-//           "Something went wrong in the Crud Repository : destroy",
-//           error
-//         );
-//         throw error;
-//       }
+//   // Delete a record by data
+//   async destroy(data) {
+//     try {
+//       const response = await this.model.destroy({
+//         where: { id: data },
+//       });
+//       return response;
+//     } catch (error) {
+//       logger.error(
+//         "Something went wrong in the Crud Repository : destroy",
+//         error
+//       );
+//       throw error;
 //     }
-  
-//     // Get a single record by primary key (ID)
-//     async get(data) {
-//       try {
-//         const response = await this.model.findByPk(data);
-//         return response;
-//       } catch (error) {
-//         console.error("Something went wrong in the Crud Repository : get", error);
-//         throw error;
-//       }
+//   }
+
+//   // Get a single record by primary key (ID)
+//   async get(data) {
+//     try {
+//       const response = await this.model.findByPk(data);
+//       return response;
+//     } catch (error) {
+//       logger.error("Something went wrong in the Crud Repository : get", error);
+//       throw error;
 //     }
-  
-//     // Get all records
-//     async getAll() {
-//       try {
-//         const response = await this.model.findAll(); // Fixed method name
-//         return response;
-//       } catch (error) {
-//         console.error(
-//           "Something went wrong in the Crud Repository : getAll",
-//           error
-//         );
-//         throw error;
-//       }
+//   }
+
+//   // Get all records
+//   async getAll() {
+//     try {
+//       const response = await this.model.findAll(); // Fixed method name
+//       return response;
+//     } catch (error) {
+//       logger.error(
+//         "Something went wrong in the Crud Repository : getAll",
+//         error
+//       );
+//       throw error;
 //     }
-//       // Update a record by ID
+//   }
+//   // Update a record by ID
 //   async update(id, data) {
 //     try {
 //       const response = await this.model.update(data, {
@@ -125,18 +163,13 @@ module.exports = CrudRepository;
 //       });
 //       return response;
 //     } catch (error) {
-//       console.error(
+//       logger.error(
 //         "Something went wrong in the Crud Repository : update",
 //         error
 //       );
 //       throw error;
 //     }
 //   }
-  
 // }
 
-// module.exports = CrudRepository; 
- 
-
-
-
+// module.exports = CrudRepository;
